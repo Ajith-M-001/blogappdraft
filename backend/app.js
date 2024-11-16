@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Add this import
+import connectDB from "./config/connectDB.js";
 
 dotenv.config();
 
@@ -31,6 +32,16 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.listen(port, () => {
-  console.log(`Server started on port http://localhost:${port}`);
-});
+const start = async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log(`Server is running on port http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.log("Error starting server:", error);
+    process.exit(1);
+  }
+};
+
+start();
